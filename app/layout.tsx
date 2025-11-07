@@ -8,9 +8,13 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Charity Rating App",
-  description: "Search and view charity ratings and metrics",
-  generator: "v0.app",
+  title: "Impact Engine — Donate with confidence",
+  description: "Transparent charity ratings and an embeddable badge that builds donor trust.",
+  openGraph: {
+    title: "Impact Engine — Donate with confidence",
+    description: "Transparent charity ratings and an embeddable badge that builds donor trust.",
+    type: "website",
+  },
   icons: {
     icon: [
       {
