@@ -61,7 +61,7 @@ export function SearchAndFilters({
   }
 
   const hasActiveFilters =
-    filters.query || filters.year || filters.category || filters.country || filters.islamicOnly || filters.rating
+    filters.query || filters.year || filters.category || filters.country || filters.rating
 
   return (
     <div className="sticky top-0 z-40 bg-white border-b border-gray-200 p-6 shadow-sm">
@@ -147,18 +147,6 @@ export function SearchAndFilters({
               <SelectItem value="Red">Red</SelectItem>
             </SelectContent>
           </Select>
-
-          <div className="flex items-center gap-2 pl-3">
-            <Checkbox
-              id="islamic-only"
-              checked={filters.islamicOnly}
-              onCheckedChange={(checked) => handleFilterChange("islamicOnly", checked === true)}
-              aria-label="Islamic charities only"
-            />
-            <Label htmlFor="islamic-only" className="cursor-pointer text-sm font-normal">
-              Islamic Only
-            </Label>
-          </div>
 
           {hasActiveFilters && (
             <Button variant="ghost" size="sm" onClick={handleClearFilters} className="gap-1">

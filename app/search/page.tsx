@@ -48,11 +48,6 @@ export default function SearchPage() {
         return false
       }
 
-      // Islamic filter
-      if (filters.islamicOnly && !charity.isIslamicCharity) {
-        return false
-      }
-
       // Rating filter
       if (filters.rating) {
         const year = charity.years.find((y) => y.year.toString() === selectedYear)

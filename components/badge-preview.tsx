@@ -60,7 +60,7 @@ export function BadgePreview({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-2 rounded-full font-medium shadow-sm transition-all hover:shadow-md",
+        "inline-flex items-center gap-2 rounded-full font-medium shadow-sm transition-all hover:shadow-md whitespace-nowrap",
         sizeClasses[size],
         themeClasses[theme][rating],
         className

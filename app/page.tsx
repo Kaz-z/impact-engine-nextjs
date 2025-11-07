@@ -104,10 +104,9 @@ export default () => <ImpactBadge charityId="CH-0001" theme="light" size="small"
               </div>
               <div className="pt-8 border-t border-gray-200">
                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-4">Trusted By</p>
-                <div className="flex gap-8 items-center opacity-40">
-                  <div className="h-8 w-24 bg-gray-300 rounded"></div>
-                  <div className="h-8 w-24 bg-gray-300 rounded"></div>
-                  <div className="h-8 w-24 bg-gray-300 rounded"></div>
+                <div className="flex gap-8 items-center">
+                  <span className="text-lg font-semibold text-gray-400">Mercy Mission</span>
+                  <span className="text-lg font-semibold text-gray-400">Charity Right</span>
                 </div>
               </div>
             </div>
@@ -252,8 +251,6 @@ export default () => <ImpactBadge charityId="CH-0001" theme="light" size="small"
             <h2 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connection Lines */}
-            <div className="hidden md:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-pink-200 via-sky-200 to-emerald-200"></div>
             
             <div className="relative text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg relative z-10">
@@ -361,16 +358,6 @@ export default () => <ImpactBadge charityId="CH-0001" theme="light" size="small"
             </AccordionItem>
 
             <AccordionItem value="item-4" className="bg-gray-50 rounded-2xl px-6 border-0">
-              <AccordionTrigger className="text-left hover:no-underline">
-                How do Islamic charities appear?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-600">
-                Islamic charities are clearly labeled and include additional compliance signals for Zakat policies 
-                and Shariah governance. All ratings follow the same transparent methodology.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-5" className="bg-gray-50 rounded-2xl px-6 border-0">
               <AccordionTrigger className="text-left hover:no-underline">
                 Can I customise the badge?
               </AccordionTrigger>
