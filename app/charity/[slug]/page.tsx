@@ -14,6 +14,7 @@ import { sampleCharityData } from "@/lib/sample-data"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { ImprovementSuggestions } from "@/components/improvement-suggestions"
+import { ExplanationInput } from "@/components/explanation-input"
 import { HelpCircle } from "lucide-react"
 
 interface DetailPageProps {
@@ -163,6 +164,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.finance.incomeTrendRating} size="sm" />
                   </div>
                   <ImprovementSuggestions metricName="Income Trend" rating={yearData.finance.incomeTrendRating} />
+                  <ExplanationInput metricName="Income Trend" rating={yearData.finance.incomeTrendRating} metricKey="incomeTrend" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-2">
@@ -183,6 +185,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.finance.operatingSurplusDeficitRating} size="sm" />
                   </div>
                   <ImprovementSuggestions metricName="Operating Surplus" rating={yearData.finance.operatingSurplusDeficitRating} />
+                  <ExplanationInput metricName="Operating Surplus" rating={yearData.finance.operatingSurplusDeficitRating} metricKey="operatingSurplus" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-2">
@@ -203,6 +206,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.finance.fundraisingEfficiencyRating} size="sm" />
                   </div>
                   <ImprovementSuggestions metricName="Fundraising Efficiency" rating={yearData.finance.fundraisingEfficiencyRating} />
+                  <ExplanationInput metricName="Fundraising Efficiency" rating={yearData.finance.fundraisingEfficiencyRating} metricKey="fundraisingEfficiency" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-2">
@@ -223,6 +227,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.finance.reservesCoverageRating} size="sm" />
                   </div>
                   <ImprovementSuggestions metricName="Reserves Coverage" rating={yearData.finance.reservesCoverageRating} />
+                  <ExplanationInput metricName="Reserves Coverage" rating={yearData.finance.reservesCoverageRating} metricKey="reservesCoverage" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-2">
@@ -243,6 +248,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.operationalCosts.charitableSpendingEfficiencyRating} size="sm" />
                   </div>
                   <ImprovementSuggestions metricName="Charitable Spending" rating={yearData.operationalCosts.charitableSpendingEfficiencyRating} />
+                  <ExplanationInput metricName="Charitable Spending" rating={yearData.operationalCosts.charitableSpendingEfficiencyRating} metricKey="charitableSpending" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-2">
@@ -263,6 +269,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.operationalCosts.fundraisingAndMarketingEfficiencyRating} size="sm" />
                   </div>
                   <ImprovementSuggestions metricName="Fundraising Efficiency" rating={yearData.operationalCosts.fundraisingAndMarketingEfficiencyRating} />
+                  <ExplanationInput metricName="Fundraising & Marketing" rating={yearData.operationalCosts.fundraisingAndMarketingEfficiencyRating} metricKey="fundraisingMarketing" />
                 </div>
               </div>
             </div>
@@ -313,6 +320,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     </div>
                   </div>
                   <ImprovementSuggestions metricName="Number of Trustees" rating={yearData.governance.numberOfTrusteesRating} />
+                  <ExplanationInput metricName="Number of Trustees" rating={yearData.governance.numberOfTrusteesRating} metricKey="numberOfTrustees" />
                 </div>
 
                 <div className="p-4 border border-gray-200 rounded-lg">
@@ -337,9 +345,11 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     </div>
                   </div>
                   <ImprovementSuggestions metricName="Governance Policies" rating={yearData.governance.governancePoliciesUpToDateRating} />
+                  <ExplanationInput metricName="Governance Policies" rating={yearData.governance.governancePoliciesUpToDateRating} metricKey="governancePolicies" />
                 </div>
 
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="p-4 border border-gray-200 rounded-lg">
+                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                   <div>
                     <div className="flex items-center gap-1 mb-1">
                       <p className="font-medium text-gray-900">Annual Returns</p>
@@ -359,6 +369,9 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                     <RatingBadge rating={yearData.governance.annualReturnsSubmittedOnTimeRating} size="sm" />
                   </div>
                 </div>
+                  <ImprovementSuggestions metricName="Annual Returns" rating={yearData.governance.annualReturnsSubmittedOnTimeRating} />
+                  <ExplanationInput metricName="Annual Returns" rating={yearData.governance.annualReturnsSubmittedOnTimeRating} metricKey="annualReturns" />
+                </div>
               </div>
             </div>
           </TabsContent>
@@ -369,7 +382,7 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Compliance</h2>
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-1 mb-1">
                       <p className="font-medium text-gray-900">Safeguarding & Data Protection</p>
                       <Tooltip>
@@ -382,12 +395,15 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                       </Tooltip>
                     </div>
                     <p className="text-sm text-gray-600">{yearData.compliance.safeguardingAndDataProtectionPolicies}</p>
+                    <div className="mt-2">
+                      <RatingBadge rating={yearData.compliance.safeguardingAndDataProtectionPoliciesRating} size="sm" />
+                    </div>
+                    <ExplanationInput metricName="Safeguarding & Data Protection" rating={yearData.compliance.safeguardingAndDataProtectionPoliciesRating} metricKey="safeguarding" />
                   </div>
-                  <RatingBadge rating={yearData.compliance.safeguardingAndDataProtectionPoliciesRating} size="sm" />
                 </div>
 
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-1 mb-1">
                       <p className="font-medium text-gray-900">GDPR Compliance</p>
                       <Tooltip>
@@ -400,12 +416,15 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                       </Tooltip>
                     </div>
                     <p className="text-sm text-gray-600">{yearData.compliance.gdprCompliance}</p>
+                    <div className="mt-2">
+                      <RatingBadge rating={yearData.compliance.gdprComplianceRating} size="sm" />
+                    </div>
+                    <ExplanationInput metricName="GDPR Compliance" rating={yearData.compliance.gdprComplianceRating} metricKey="gdprCompliance" />
                   </div>
-                  <RatingBadge rating={yearData.compliance.gdprComplianceRating} size="sm" />
                 </div>
 
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-1 mb-1">
                       <p className="font-medium text-gray-900">Health & Safety Compliance</p>
                       <Tooltip>
@@ -418,13 +437,16 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                       </Tooltip>
                     </div>
                     <p className="text-sm text-gray-600">{yearData.compliance.healthAndSafetyCompliance}</p>
+                    <div className="mt-2">
+                      <RatingBadge rating={yearData.compliance.healthAndSafetyComplianceRating} size="sm" />
+                    </div>
+                    <ExplanationInput metricName="Health & Safety Compliance" rating={yearData.compliance.healthAndSafetyComplianceRating} metricKey="healthSafety" />
                   </div>
-                  <RatingBadge rating={yearData.compliance.healthAndSafetyComplianceRating} size="sm" />
                 </div>
 
                 {yearData.compliance.zakatPolicyCompliance && (
                   <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div>
+                    <div className="flex-1">
                       <div className="flex items-center gap-1 mb-1">
                         <p className="font-medium text-gray-900">Zakat Policy Compliance</p>
                         <Tooltip>
@@ -437,8 +459,11 @@ export default function CharityDetailPage({ params, searchParams }: DetailPagePr
                         </Tooltip>
                       </div>
                       <p className="text-sm text-gray-600">{yearData.compliance.zakatPolicyCompliance}</p>
+                      <div className="mt-2">
+                        <RatingBadge rating={yearData.compliance.zakatPolicyComplianceRating} size="sm" />
+                      </div>
+                      <ExplanationInput metricName="Zakat Policy Compliance" rating={yearData.compliance.zakatPolicyComplianceRating} metricKey="zakatCompliance" />
                     </div>
-                    <RatingBadge rating={yearData.compliance.zakatPolicyComplianceRating} size="sm" />
                   </div>
                 )}
               </div>
