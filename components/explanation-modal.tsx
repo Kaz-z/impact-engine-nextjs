@@ -1,6 +1,6 @@
 "use client"
 
-import { MessageSquare, X } from "lucide-react"
+import { MessageSquare, X, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
@@ -12,6 +12,22 @@ interface ExplanationModalProps {
   onClose: () => void
   initialValue?: string
   onSave?: (explanation: string) => void
+}
+
+const platformExplanations: Record<string, string> = {
+  "Income Trend": "This metric is rated Red because the charity has experienced a significant decline in income year-over-year. A negative income trend can indicate challenges with donor retention, fundraising effectiveness, or external economic factors affecting donations.",
+  "Operating Surplus": "This metric is rated Red because the charity is running a significant deficit or has an excessive surplus. A deficit means spending exceeds income, which is unsustainable long-term. An excessive surplus may suggest funds are not being used effectively for charitable purposes.",
+  "Fundraising Efficiency": "This metric is rated Red because the cost of raising £1 in donations exceeds 35%. This means a large portion of donations is spent on fundraising rather than charitable activities, which may concern donors.",
+  "Reserves Coverage": "This metric is rated Red because the charity has insufficient reserves to cover operating expenses. Less than 3 months of reserves leaves the charity vulnerable to unexpected events or income fluctuations.",
+  "Charitable Spending": "This metric is rated Red because less than 60% of total spending goes directly to charitable activities. This suggests a high proportion of funds is being spent on administration and support costs rather than the core mission.",
+  "Fundraising & Marketing": "This metric is rated Red because more than 35% of income is being spent on fundraising and marketing. This high proportion reduces the amount available for charitable work.",
+  "Number of Trustees": "This metric is rated Red because the number of trustees is outside the recommended range of 5-12. Too few trustees can lead to poor oversight and governance risks, while too many can make decision-making slow and ineffective.",
+  "Governance Policies": "This metric is rated Red because key governance policies are not up to date. Outdated policies create compliance risks and suggest weak governance oversight.",
+  "Annual Returns": "This metric is rated Red because the charity failed to submit annual returns to the regulator on time. Late submission indicates poor administrative processes and governance concerns.",
+  "Safeguarding & Data Protection": "This metric is rated Red because safeguarding and data protection policies are inadequate or missing. This creates serious risks to vulnerable people and personal data.",
+  "GDPR Compliance": "This metric is rated Red because the charity is not compliant with GDPR data protection regulations. This creates legal risks and may result in penalties.",
+  "Health & Safety Compliance": "This metric is rated Red because the charity is not meeting health and safety requirements. This puts staff, volunteers, and beneficiaries at risk.",
+  "Zakat Policy Compliance": "This metric is rated Red because the charity is not fully compliant with Zakat principles and Shariah governance requirements. This may concern donors who specifically give Zakat."
 }
 
 export function ExplanationModal({ 
@@ -30,6 +46,8 @@ export function ExplanationModal({
     onSave?.(explanation)
     onClose()
   }
+
+  const platformExplanation = rating === "Red" ? platformExplanations[metricName] : null
 
   return (
     <>
@@ -56,7 +74,7 @@ export function ExplanationModal({
                 }`} />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">Provide Context</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Score Explanation</h2>
                 <p className="text-sm text-gray-600">{metricName}</p>
               </div>
             </div>
@@ -69,23 +87,37 @@ export function ExplanationModal({
           </div>
 
           {/* Content */}
-          <div className="p-6">
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="explanation" className="block text-sm font-medium text-gray-700 mb-2">
-                  Why is this score {rating.toLowerCase()}?
-                </label>
-                <p className="text-sm text-gray-600 mb-3">
-                  Help donors understand the context behind this metric. Your explanation will be visible to potential supporters.
-                </p>
-                <Textarea
-                  id="explanation"
-                  placeholder="For example: 'We invested heavily in a new community center this year, which temporarily reduced our reserves but will enable us to serve 3x more beneficiaries going forward...'"
-                  value={explanation}
-                  onChange={(e) => setExplanation(e.target.value)}
-                  className="min-h-[150px]"
-                />
+          <div className="p-6 overflow-y-auto max-h-[calc(85vh-180px)] space-y-6">
+            {/* Platform Explanation (for Red ratings) */}
+            {platformExplanation && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="text-sm font-semibold text-red-900 mb-2">Why this is rated Red</h3>
+                    <p className="text-sm text-red-800 leading-relaxed">
+                      {platformExplanation}
+                    </p>
+                  </div>
+                </div>
               </div>
+            )}
+
+            {/* Charity's Explanation Input */}
+            <div>
+              <label htmlFor="explanation" className="block text-sm font-medium text-gray-700 mb-2">
+                {rating === "Red" ? "Add your context" : "Provide additional context"}
+              </label>
+              <p className="text-sm text-gray-600 mb-3">
+                Help donors understand the full story behind this metric. Your explanation will be visible to potential supporters.
+              </p>
+              <Textarea
+                id="explanation"
+                placeholder="For example: 'We invested heavily in a new community center this year, which temporarily reduced our reserves but will enable us to serve 3x more beneficiaries going forward...'"
+                value={explanation}
+                onChange={(e) => setExplanation(e.target.value)}
+                className="min-h-[150px]"
+              />
             </div>
           </div>
 
@@ -110,3 +142,4 @@ export function ExplanationModal({
     </>
   )
 }
+
