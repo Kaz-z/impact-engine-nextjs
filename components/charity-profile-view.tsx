@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
@@ -17,12 +18,18 @@ import { CharityCommissionBlock } from "@/components/charity-commission-block"
 import { TrusteeList } from "@/components/trustee-list"
 import { CharityDetailsBlock } from "@/components/charity-details-block"
 import { MissingInformationPanel } from "@/components/missing-information-panel"
+import { FundPreferencesReview } from "@/components/fund-preferences-review"
 import { FunderDueDiligencePanel } from "@/components/funder-due-diligence-panel"
+import { SharedPlatformData } from "@/components/shared-platform-data"
 import { ProfileSummaryBadges } from "@/components/profile-summary-badges"
 import { RequestUpdateButton } from "@/components/request-update-button"
 import { UpdatesTab } from "@/components/updates-tab"
 import { useCharityDemoState } from "@/hooks/use-charity-demo-state"
 import { FunderHeader } from "@/components/funder-header"
+import {
+  loadFundPreferences,
+  checkCharityAgainstPreferences,
+} from "@/lib/fund-preferences"
 import type { Charity, CharityYear } from "@/lib/types"
 import { HelpCircle, CheckCircle2 } from "lucide-react"
 
@@ -50,15 +57,27 @@ export function CharityProfileView({
   } = useCharityDemoState(baseCharity)
 
   const dueDiligenceSummary = getDueDiligenceSummary(yearData)
+  const [preferences, setPreferences] = useState<string[]>([])
+
+  useEffect(() => {
+    setPreferences(loadFundPreferences())
+  }, [])
+
+  const preferenceChecks = useMemo(
+    () => checkCharityAgainstPreferences(charity, preferences, selectedYear),
+    [charity, preferences, selectedYear],
+  )
+
+  const demoMode = preferences.length > 0
 
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gray-50">
         <FunderHeader />
         <div className="max-w-7xl mx-auto p-6">
-          <Link href="/search">
+          <Link href="/fund">
             <Button variant="ghost" className="gap-2 mb-6">
-              ← Back to Search
+              ← Back to your fund page
             </Button>
           </Link>
 
@@ -117,33 +136,49 @@ export function CharityProfileView({
             />
           </div>
 
-          <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5 bg-white border border-gray-200">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
+          <SharedPlatformData charity={charity} />
+
+          <Tabs defaultValue={demoMode ? "due-diligence" : "overview"} className="space-y-6 mt-6">
+            <TabsList
+              className={`grid w-full bg-white border border-gray-200 ${
+                demoMode ? "grid-cols-4" : "grid-cols-5"
+              }`}
+            >
               <TabsTrigger value="due-diligence">Due diligence</TabsTrigger>
-              <TabsTrigger value="missing-info">Missing info</TabsTrigger>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              {!demoMode && <TabsTrigger value="missing-info">Missing info</TabsTrigger>}
               <TabsTrigger value="updates">Updates</TabsTrigger>
-              <TabsTrigger value="financial-analysis">Financial analysis</TabsTrigger>
+              <TabsTrigger value="analysis">Analysis</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="due-diligence" className="space-y-6">
+              {demoMode ? (
+                <FundPreferencesReview checks={preferenceChecks} />
+              ) : (
+                <FunderDueDiligencePanel summary={dueDiligenceSummary} />
+              )}
+            </TabsContent>
 
             <TabsContent value="overview" className="space-y-6">
               <CharityCommissionBlock
                 data={charity.charityCommission}
                 charityNumber={charity.registrationNumber}
               />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <TrusteeList trustees={charity.trustees} />
+              {demoMode ? (
                 <CharityDetailsBlock charity={charity} />
-              </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <TrusteeList trustees={charity.trustees} />
+                  <CharityDetailsBlock charity={charity} />
+                </div>
+              )}
             </TabsContent>
 
-            <TabsContent value="due-diligence">
-              <FunderDueDiligencePanel summary={dueDiligenceSummary} />
-            </TabsContent>
-
-            <TabsContent value="missing-info">
-              <MissingInformationPanel charity={charity} />
-            </TabsContent>
+            {!demoMode && (
+              <TabsContent value="missing-info">
+                <MissingInformationPanel charity={charity} />
+              </TabsContent>
+            )}
 
             <TabsContent value="updates">
               <UpdatesTab
@@ -154,7 +189,7 @@ export function CharityProfileView({
               />
             </TabsContent>
 
-            <TabsContent value="financial-analysis" className="space-y-6">
+            <TabsContent value="analysis" className="space-y-6">
               <Tabs defaultValue="finance" className="space-y-6">
                 <TabsList className="bg-white border border-gray-200">
                   <TabsTrigger value="finance">Finance</TabsTrigger>

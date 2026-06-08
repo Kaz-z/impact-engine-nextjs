@@ -9,6 +9,12 @@ export const DEMO_FUNDER = {
   name: "Example Foundation",
 } as const
 
+/** Another funder in the demo — used to show cross-funder visibility */
+export const DEMO_OTHER_FUNDER = {
+  id: "national-relief-trust",
+  name: "National Relief Trust",
+} as const
+
 export const FUNDER_REQUIREMENTS: FunderRequirement[] = [
   {
     id: "dd-registered",

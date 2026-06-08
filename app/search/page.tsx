@@ -86,21 +86,30 @@ export default function SearchPage() {
       />
 
       <div className="max-w-7xl mx-auto p-6">
-        {demoCharity && !filters.query && (
+        {!filters.query && (
           <div className="mb-6 p-4 bg-white rounded-lg border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-gray-900">Try the demo</p>
+              <p className="text-sm font-medium text-gray-900">Start with your fund page</p>
               <p className="text-sm text-gray-500 mt-0.5">
-                Search for <span className="font-medium text-gray-700">{DEMO_CHARITY_SEARCH_HINT}</span> to
-                walk through a sample due diligence review
+                Set due diligence criteria and filter charities — or search for{" "}
+                <span className="font-medium text-gray-700">{DEMO_CHARITY_SEARCH_HINT}</span> directly
               </p>
             </div>
-            <Button variant="outline" className="shrink-0 gap-2" asChild>
-              <Link href={`/charity/${demoCharity.slug}`}>
-                Open {demoCharity.name}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="flex gap-2 shrink-0">
+              <Button variant="outline" className="gap-2" asChild>
+                <Link href="/fund">
+                  Your fund page
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              {demoCharity && (
+                <Button variant="ghost" className="gap-2" asChild>
+                  <Link href={`/charity/${demoCharity.slug}`}>
+                    Open {demoCharity.name}
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
         )}
 

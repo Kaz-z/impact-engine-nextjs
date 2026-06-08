@@ -7,7 +7,7 @@ import type {
   UpdateHistoryEntry,
 } from "./types"
 import { REQUIRED_INFORMATION } from "./required-information"
-import { DEMO_FUNDER } from "./funder-requirements"
+import { DEMO_FUNDER, DEMO_OTHER_FUNDER } from "./funder-requirements"
 
 export interface CharityMetadataOverride {
   charityCommission?: Partial<CharityCommissionData>
@@ -164,7 +164,7 @@ const METADATA_OVERRIDES: Record<string, CharityMetadataOverride> = {
       "safeguarding-policy": {
         status: "present",
         lastUpdated: "2025-01-12",
-        notes: "Provided via Impact Engine — requested by a funder",
+        notes: `Provided via Impact Engine — requested by ${DEMO_OTHER_FUNDER.name}`,
       },
       "bank-details": { status: "missing", notes: "Not yet verified on platform" },
       "governance-policies": { status: "missing", notes: "No governance policy document on file" },
@@ -180,7 +180,11 @@ const METADATA_OVERRIDES: Record<string, CharityMetadataOverride> = {
         title: "Safeguarding policy provided",
         description:
           "Charity uploaded an updated safeguarding policy. Now available to all funders on Impact Engine.",
-        requestedBy: { id: "anon-1", displayName: "A funder", isAnonymous: true },
+        requestedBy: {
+          id: DEMO_OTHER_FUNDER.id,
+          displayName: DEMO_OTHER_FUNDER.name,
+          isAnonymous: false,
+        },
         informationItemId: "safeguarding-policy",
         isShared: true,
       },
