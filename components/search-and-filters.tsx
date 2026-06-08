@@ -64,12 +64,12 @@ export function SearchAndFilters({
     filters.query || filters.year || filters.category || filters.country || filters.rating
 
   return (
-    <div className="sticky top-0 z-40 bg-white border-b border-gray-200 p-6 shadow-sm">
+    <div className="sticky top-[41px] z-40 bg-white border-b border-gray-200 p-6 shadow-sm">
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Search bar */}
         <div className="relative">
           <Input
-            placeholder="Search by charity name or registration number..."
+            placeholder="Search by charity name or charity number..."
             value={filters.query}
             onChange={(e) => handleFilterChange("query", e.target.value)}
             className="pl-10 h-10"

@@ -1,14 +1,12 @@
-import type { CharityData } from "./types"
+import type { CharityCore, CharityData } from "./types"
+import { enrichCharities } from "./charity-metadata"
 
-export const sampleCharityData: CharityData = {
-  version: "1.0",
-  generatedAt: "2024-11-06T00:00:00Z",
-  charities: [
+const rawCharities: CharityCore[] = [
     {
       id: "ch-001",
       slug: "global-water-initiative",
       name: "Global Water Initiative",
-      registrationNumber: "REG-2020-001",
+      registrationNumber: "1180001",
       country: "United Kingdom",
       isIslamicCharity: false,
       categories: ["Water", "Sanitation", "Development"],
@@ -130,7 +128,7 @@ export const sampleCharityData: CharityData = {
       id: "ch-002",
       slug: "islamic-relief-foundation",
       name: "Islamic Relief Foundation",
-      registrationNumber: "REG-2019-042",
+      registrationNumber: "328158",
       country: "United Kingdom",
       isIslamicCharity: true,
       categories: ["Humanitarian", "Emergency Aid", "Development"],
@@ -824,7 +822,12 @@ export const sampleCharityData: CharityData = {
         },
       ],
     },
-  ],
+]
+
+export const sampleCharityData: CharityData = {
+  version: "1.0",
+  generatedAt: "2024-11-06T00:00:00Z",
+  charities: enrichCharities(rawCharities),
   ratingLegend: {
     Green: "Meets or exceeds target threshold",
     Amber: "Close to target, needs improvement",

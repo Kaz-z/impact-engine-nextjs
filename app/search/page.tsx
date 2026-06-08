@@ -1,9 +1,14 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import Link from "next/link"
 import { SearchAndFilters, type SearchFilters } from "@/components/search-and-filters"
 import { CharityCard } from "@/components/charity-card"
 import { sampleCharityData } from "@/lib/sample-data"
+import { DEMO_CHARITY_SLUG, DEMO_CHARITY_SEARCH_HINT } from "@/lib/demo-charity"
+import { Button } from "@/components/ui/button"
+import { FunderHeader } from "@/components/funder-header"
+import { ArrowRight } from "lucide-react"
 
 export default function SearchPage() {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -22,6 +27,8 @@ export default function SearchPage() {
   const availableYears = Array.from(new Set(sampleCharityData.charities.flatMap((c) => c.years.map((y) => y.year))))
 
   const selectedYear = filters.year || availableYears.sort((a, b) => b - a)[0].toString()
+
+  const demoCharity = sampleCharityData.charities.find((c) => c.slug === DEMO_CHARITY_SLUG)
 
   const filteredCharities = useMemo(() => {
     return sampleCharityData.charities.filter((charity) => {
@@ -70,6 +77,7 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <FunderHeader />
       <SearchAndFilters
         onFiltersChange={setFilters}
         availableCategories={availableCategories}
@@ -78,6 +86,24 @@ export default function SearchPage() {
       />
 
       <div className="max-w-7xl mx-auto p-6">
+        {demoCharity && !filters.query && (
+          <div className="mb-6 p-4 bg-white rounded-lg border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-gray-900">Try the demo</p>
+              <p className="text-sm text-gray-500 mt-0.5">
+                Search for <span className="font-medium text-gray-700">{DEMO_CHARITY_SEARCH_HINT}</span> to
+                walk through a sample due diligence review
+              </p>
+            </div>
+            <Button variant="outline" className="shrink-0 gap-2" asChild>
+              <Link href={`/charity/${demoCharity.slug}`}>
+                Open {demoCharity.name}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        )}
+
         {filteredCharities.length === 0 ? (
           <div className="text-center py-12">
             <h2 className="text-lg font-semibold text-gray-900 mb-2">No charities found</h2>

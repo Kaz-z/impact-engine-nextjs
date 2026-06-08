@@ -55,6 +55,9 @@ export default () => <ImpactBadge charityId="CH-0001" theme="light" size="small"
             <span className="text-xl font-bold text-gray-900">Impact Engine</span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
+            <Link href="/search" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+              Review charities
+            </Link>
             <a href="#features" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Features
             </a>
@@ -64,11 +67,8 @@ export default () => <ImpactBadge charityId="CH-0001" theme="light" size="small"
             <a href="#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               FAQ
             </a>
-            <a href="#contact" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-              Contact
-            </a>
-            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6">
-              Get Early Access
+            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6" asChild>
+              <Link href="/search">Review a charity</Link>
             </Button>
           </nav>
         </div>
@@ -89,16 +89,16 @@ export default () => <ImpactBadge charityId="CH-0001" theme="light" size="small"
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 shadow-lg hover:shadow-xl transition-all">
-                  Get Early Access
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button size="lg" variant="ghost" className="rounded-full px-8 border-2 border-gray-200 hover:border-gray-300" asChild>
+                <Button size="lg" className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 shadow-lg hover:shadow-xl transition-all" asChild>
                   <Link href="/search">
-                    Search Charities
+                    Review a charity
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="ghost" className="rounded-full px-8 border-2 border-gray-200 hover:border-gray-300">
+                  Get Early Access
+                </Button>
+                <Button size="lg" variant="ghost" className="rounded-full px-8 border-2 border-gray-200 hover:border-gray-300" asChild>
                   <a href="#badge">See the Badge</a>
                 </Button>
               </div>

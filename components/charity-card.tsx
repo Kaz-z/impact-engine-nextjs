@@ -30,6 +30,9 @@ export function CharityCard({ charity, selectedYear }: CharityCardProps) {
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-lg text-gray-900 truncate">{charity.name}</h3>
               <p className="text-xs text-gray-500 font-mono mt-1 truncate">{charity.registrationNumber}</p>
+              {charity.categories[0] && (
+                <p className="text-xs text-gray-600 mt-1 truncate">{charity.categories[0]}</p>
+              )}
             </div>
           </div>
 
