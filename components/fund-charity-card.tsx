@@ -1,6 +1,5 @@
 import Link from "next/link"
 import type { FilteredCharityResult } from "@/lib/fund-preferences"
-import { getPreferenceLabel } from "@/lib/fund-preferences"
 import { RatingBadge } from "./rating-badge"
 import { Card } from "./ui/card"
 import { ArrowRight } from "lucide-react"
@@ -51,10 +50,8 @@ export function FundCharityCard({ result }: FundCharityCardProps) {
           {checks.length > 0 && (
             <div className="space-y-1.5">
               {checks.slice(0, 3).map((check) => (
-                <div key={check.preferenceId} className="flex items-center justify-between text-xs">
-                  <span className="text-gray-600 truncate pr-2">
-                    {getPreferenceLabel(check.preferenceId)}
-                  </span>
+                <div key={check.criterionId} className="flex items-center justify-between text-xs">
+                  <span className="text-gray-600 truncate pr-2">{check.label}</span>
                   <RatingBadge rating={check.rating} size="sm" />
                 </div>
               ))}

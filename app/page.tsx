@@ -62,16 +62,26 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <Button
-                  size="lg"
-                  className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 shadow-lg hover:shadow-xl transition-all"
-                  asChild
-                >
-                  <Link href="/fund">
-                    Go to your fund page
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                <div className="flex flex-wrap gap-4">
+                  <Button
+                    size="lg"
+                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 shadow-lg hover:shadow-xl transition-all"
+                    asChild
+                  >
+                    <Link href="/fund">
+                      Go to your fund page
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="ghost"
+                    className="rounded-full px-8 border-2 border-gray-200 hover:border-gray-300 bg-white/80"
+                    asChild
+                  >
+                    <Link href="/fund/settings">Configure criteria</Link>
+                  </Button>
+                </div>
               </div>
             </div>
 

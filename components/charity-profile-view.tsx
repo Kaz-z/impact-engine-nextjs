@@ -27,8 +27,11 @@ import { UpdatesTab } from "@/components/updates-tab"
 import { useCharityDemoState } from "@/hooks/use-charity-demo-state"
 import { FunderHeader } from "@/components/funder-header"
 import {
-  loadFundPreferences,
-  checkCharityAgainstPreferences,
+  loadFundCriteria,
+  checkCharityAgainstCriteria,
+  getEnabledCriterionIds,
+  DEFAULT_FUND_CRITERIA,
+  type FundCriteriaConfig,
 } from "@/lib/fund-preferences"
 import type { Charity, CharityYear } from "@/lib/types"
 import { HelpCircle, CheckCircle2 } from "lucide-react"
@@ -57,18 +60,18 @@ export function CharityProfileView({
   } = useCharityDemoState(baseCharity)
 
   const dueDiligenceSummary = getDueDiligenceSummary(yearData)
-  const [preferences, setPreferences] = useState<string[]>([])
+  const [criteria, setCriteria] = useState<FundCriteriaConfig>(DEFAULT_FUND_CRITERIA)
 
   useEffect(() => {
-    setPreferences(loadFundPreferences())
+    setCriteria(loadFundCriteria())
   }, [])
 
   const preferenceChecks = useMemo(
-    () => checkCharityAgainstPreferences(charity, preferences, selectedYear),
-    [charity, preferences, selectedYear],
+    () => checkCharityAgainstCriteria(charity, criteria, selectedYear),
+    [charity, criteria, selectedYear],
   )
 
-  const demoMode = preferences.length > 0
+  const demoMode = getEnabledCriterionIds(criteria).length > 0
 
   return (
     <TooltipProvider>

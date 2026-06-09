@@ -1,5 +1,4 @@
 import type { PreferenceCheckResult } from "@/lib/fund-preferences"
-import { getPreferenceLabel } from "@/lib/fund-preferences"
 import { DEMO_FUNDER } from "@/lib/funder-requirements"
 import { RatingBadge } from "@/components/rating-badge"
 import type { Rating } from "@/lib/types"
@@ -45,12 +44,10 @@ export function FundPreferencesReview({ checks }: FundPreferencesReviewProps) {
 
       <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
         {checks.map((check) => (
-          <div key={check.preferenceId} className="p-6">
+          <div key={check.criterionId} className="p-6">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-gray-900">
-                  {getPreferenceLabel(check.preferenceId)}
-                </p>
+                <p className="font-medium text-gray-900">{check.label}</p>
                 <p className="text-sm text-gray-600 mt-2 leading-relaxed">{check.note}</p>
                 {!check.hasSubmittedInfo && (
                   <p className="text-xs text-red-600 mt-2 font-medium">

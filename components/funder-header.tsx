@@ -22,6 +22,12 @@ export function FunderHeader() {
               Your fund page
             </Link>
             <Link
+              href="/fund/settings"
+              className="text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              Criteria
+            </Link>
+            <Link
               href="/search"
               className="text-gray-500 hover:text-gray-700 transition-colors"
             >
