@@ -179,6 +179,23 @@ function migrateLegacyPreferences(legacyIds: string[]): FundCriteriaConfig {
 }
 
 export function loadFundCriteria(): FundCriteriaConfig {
+  // Delegates to unified fund settings when available (client-side only)
+  if (typeof window !== "undefined") {
+    try {
+      const settingsRaw = localStorage.getItem("impact-engine-fund-settings")
+      if (settingsRaw) {
+        const parsed = JSON.parse(settingsRaw) as { criteria?: FundCriteriaConfig }
+        if (parsed.criteria) {
+          return {
+            enabled: { ...DEFAULT_FUND_CRITERIA.enabled, ...parsed.criteria.enabled },
+            values: { ...DEFAULT_FUND_CRITERIA_VALUES, ...parsed.criteria.values },
+          }
+        }
+      }
+    } catch {
+      // fall through
+    }
+  }
   if (typeof window === "undefined") return structuredClone(DEFAULT_FUND_CRITERIA)
   try {
     const raw = localStorage.getItem(STORAGE_KEY)

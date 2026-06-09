@@ -21,18 +21,21 @@ import { MissingInformationPanel } from "@/components/missing-information-panel"
 import { FundPreferencesReview } from "@/components/fund-preferences-review"
 import { FunderDueDiligencePanel } from "@/components/funder-due-diligence-panel"
 import { SharedPlatformData } from "@/components/shared-platform-data"
+import { CriteriaGapsPanel } from "@/components/criteria-gaps-panel"
 import { ProfileSummaryBadges } from "@/components/profile-summary-badges"
 import { RequestUpdateButton } from "@/components/request-update-button"
 import { UpdatesTab } from "@/components/updates-tab"
 import { useCharityDemoState } from "@/hooks/use-charity-demo-state"
 import { FunderHeader } from "@/components/funder-header"
 import {
-  loadFundCriteria,
   checkCharityAgainstCriteria,
   getEnabledCriterionIds,
-  DEFAULT_FUND_CRITERIA,
-  type FundCriteriaConfig,
 } from "@/lib/fund-preferences"
+import {
+  loadFundSettings,
+  DEFAULT_FUND_SETTINGS,
+  type FundSettings,
+} from "@/lib/fund-settings"
 import type { Charity, CharityYear } from "@/lib/types"
 import { HelpCircle, CheckCircle2 } from "lucide-react"
 
@@ -60,18 +63,19 @@ export function CharityProfileView({
   } = useCharityDemoState(baseCharity)
 
   const dueDiligenceSummary = getDueDiligenceSummary(yearData)
-  const [criteria, setCriteria] = useState<FundCriteriaConfig>(DEFAULT_FUND_CRITERIA)
+  const [settings, setSettings] = useState<FundSettings>(DEFAULT_FUND_SETTINGS)
 
   useEffect(() => {
-    setCriteria(loadFundCriteria())
+    setSettings(loadFundSettings())
   }, [])
 
   const preferenceChecks = useMemo(
-    () => checkCharityAgainstCriteria(charity, criteria, selectedYear),
-    [charity, criteria, selectedYear],
+    () => checkCharityAgainstCriteria(charity, settings.criteria, selectedYear),
+    [charity, settings.criteria, selectedYear],
   )
 
-  const demoMode = getEnabledCriterionIds(criteria).length > 0
+  const demoMode = getEnabledCriterionIds(settings.criteria).length > 0
+  const unmetCount = preferenceChecks.filter((c) => !c.meetsRequirement).length
 
   return (
     <TooltipProvider>
@@ -141,13 +145,31 @@ export function CharityProfileView({
 
           <SharedPlatformData charity={charity} />
 
-          <Tabs defaultValue={demoMode ? "due-diligence" : "overview"} className="space-y-6 mt-6">
+          {demoMode && (
+            <div className="mt-6">
+              <CriteriaGapsPanel
+                checks={preferenceChecks}
+                charity={charity}
+                onSubmitRequest={sendUpdateRequest}
+              />
+            </div>
+          )}
+
+          <Tabs
+            defaultValue={demoMode ? "due-diligence" : "overview"}
+            className="space-y-6 mt-6"
+          >
             <TabsList
               className={`grid w-full bg-white border border-gray-200 ${
                 demoMode ? "grid-cols-4" : "grid-cols-5"
               }`}
             >
-              <TabsTrigger value="due-diligence">Due diligence</TabsTrigger>
+              <TabsTrigger value="due-diligence">
+                Due diligence
+                {unmetCount > 0 && (
+                  <span className="ml-1.5 text-xs text-amber-600">({unmetCount})</span>
+                )}
+              </TabsTrigger>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               {!demoMode && <TabsTrigger value="missing-info">Missing info</TabsTrigger>}
               <TabsTrigger value="updates">Updates</TabsTrigger>

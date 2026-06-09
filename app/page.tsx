@@ -5,35 +5,44 @@ import { DEMO_FUNDER } from "@/lib/funder-requirements"
 import {
   ArrowRight,
   ClipboardCheck,
+  Eye,
   Filter,
-  Share2,
+  Send,
   Sparkles,
 } from "lucide-react"
 
 const steps = [
   {
     icon: ClipboardCheck,
-    title: "Set your criteria",
+    title: "Set requirements",
     description:
-      "Choose what due diligence matters to your fund — reserves, operating history, safeguarding, and more.",
+      "Configure due diligence criteria — reserves, operating history, safeguarding — with your own thresholds.",
     tint: "from-violet-50 to-white border-violet-100",
     iconBg: "bg-violet-100 text-violet-600",
   },
   {
-    icon: Filter,
-    title: "Filter charities",
+    icon: Eye,
+    title: "Choose visibility",
     description:
-      "See only charities that have submitted the required information and meet your standards.",
+      "Decide how your funding activity appears — fund name, anonymous, or visible to BMFN network only.",
     tint: "from-sky-50 to-white border-sky-100",
     iconBg: "bg-sky-100 text-sky-600",
   },
   {
-    icon: Share2,
-    title: "Shared platform data",
+    icon: Filter,
+    title: "Review charities",
     description:
-      "See what other funders have already requested — no duplicate asks for the same information.",
+      "See which charities meet your requirements — and which only partially match.",
     tint: "from-emerald-50 to-white border-emerald-100",
     iconBg: "bg-emerald-100 text-emerald-600",
+  },
+  {
+    icon: Send,
+    title: "Request updates",
+    description:
+      "Spot gaps on a charity profile and ask them to update missing information.",
+    tint: "from-amber-50 to-white border-amber-100",
+    iconBg: "bg-amber-100 text-amber-600",
   },
 ]
 
@@ -49,90 +58,83 @@ export default function HomePage() {
             <div className="space-y-8">
               <div className="space-y-4">
                 <p className="text-sm font-medium text-gray-500 tracking-wide uppercase">
-                  Your fund page
+                  Impact Engine
                 </p>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                  Tailor due diligence to your fund.
+                  Due diligence, tailored to your fund.
                 </h1>
                 <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">
-                  This is where you set your preferences and get a filtered view of charities
-                  against your requirements — plus visibility on information other funders have
-                  already requested.
+                  Set your requirements, choose how visible you are on the platform, filter
+                  charities against your criteria, and request updates where gaps remain.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4">
-                  <Button
-                    size="lg"
-                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 shadow-lg hover:shadow-xl transition-all"
-                    asChild
-                  >
-                    <Link href="/fund">
-                      Go to your fund page
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="ghost"
-                    className="rounded-full px-8 border-2 border-gray-200 hover:border-gray-300 bg-white/80"
-                    asChild
-                  >
-                    <Link href="/fund/settings">Configure criteria</Link>
-                  </Button>
-                </div>
+                <Button
+                  size="lg"
+                  className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 shadow-lg hover:shadow-xl transition-all"
+                  asChild
+                >
+                  <Link href="/fund/settings">
+                    Set up your fund
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="rounded-full px-8 border-2 border-gray-200 hover:border-gray-300 bg-white/80"
+                  asChild
+                >
+                  <Link href="/fund">View charities</Link>
+                </Button>
               </div>
             </div>
 
-            {/* Fund page preview */}
             <div className="relative lg:pl-4">
               <div className="absolute -top-3 -right-3 w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center shadow-sm">
                 <Sparkles className="h-7 w-7 text-yellow-500" />
               </div>
               <div className="bg-white rounded-3xl p-8 shadow-2xl border border-gray-200">
-                <div className="space-y-6">
+                <div className="space-y-5">
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
                       {DEMO_FUNDER.name}
                     </p>
-                    <p className="text-lg font-bold text-gray-900">Due diligence criteria</p>
+                    <p className="text-lg font-bold text-gray-900">Fund settings</p>
                   </div>
 
                   <div className="space-y-2">
+                    <p className="text-xs font-medium text-gray-500 uppercase">Criteria</p>
                     {[
                       "At least 6 months of reserves",
                       "Operating for 5+ years",
-                      "Accounts filed on time",
                       "Safeguarding policy on file",
                     ].map((item) => (
                       <div
                         key={item}
-                        className="flex items-center gap-3 text-sm py-2 px-3 rounded-lg bg-gray-50"
+                        className="text-sm py-1.5 px-3 rounded-lg bg-gray-50 text-gray-700"
                       >
-                        <span className="w-4 h-4 rounded border-2 border-violet-400 bg-violet-100 flex items-center justify-center">
-                          <span className="w-2 h-2 bg-violet-600 rounded-sm" />
-                        </span>
-                        <span className="text-gray-700">{item}</span>
+                        {item}
                       </div>
                     ))}
                   </div>
 
-                  <div className="pt-2 border-t border-gray-100 space-y-2">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Matching charities
+                  <div className="space-y-1">
+                    <p className="text-xs font-medium text-gray-500 uppercase">Visibility</p>
+                    <p className="text-sm py-1.5 px-3 rounded-lg bg-gray-50 text-gray-700">
+                      Fund name only
                     </p>
-                    <div className="flex items-center justify-between text-sm py-2 px-3 rounded-lg bg-emerald-50 border border-emerald-100">
-                      <span className="text-gray-900 font-medium">Action For Humanity</span>
-                      <span className="text-xs text-emerald-700 font-medium">3 of 4 met</span>
-                    </div>
                   </div>
 
-                  <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
-                    <p className="text-xs text-blue-800">
-                      <span className="font-medium">National Relief Trust</span> requested
-                      safeguarding policy — you have visibility on this too.
+                  <div className="pt-2 border-t border-gray-100">
+                    <p className="text-xs font-medium text-gray-500 uppercase mb-2">
+                      Partial match
                     </p>
+                    <div className="flex items-center justify-between text-sm py-2 px-3 rounded-lg bg-amber-50 border border-amber-100">
+                      <span className="font-medium text-gray-900">Action For Humanity</span>
+                      <span className="text-xs text-amber-700 font-medium">3 of 4 met</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -143,7 +145,7 @@ export default function HomePage() {
 
       <section className="py-16 md:py-20 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {steps.map(({ icon: Icon, title, description, tint, iconBg }) => (
               <div
                 key={title}
@@ -166,10 +168,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">Pilot demo — not a live platform</p>
           <Link
-            href="/fund"
+            href="/fund/settings"
             className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
           >
-            Go to your fund page →
+            Set up your fund →
           </Link>
         </div>
       </footer>

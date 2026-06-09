@@ -10,6 +10,10 @@ import type { InformationItemStatus } from "@/lib/types"
 import { REQUIRED_INFORMATION_BY_ID } from "@/lib/required-information"
 import { DEMO_FUNDER } from "@/lib/funder-requirements"
 import { getGapItemIds } from "@/lib/demo-storage"
+import {
+  getPublicVisibilityLabel,
+  loadFundSettings,
+} from "@/lib/fund-settings"
 
 interface RequestUpdateModalProps {
   isOpen: boolean
@@ -55,6 +59,9 @@ export function RequestUpdateModal({
     (item) => item.status === "missing" || item.status === "outdated",
   )
 
+  const visibility = loadFundSettings().visibility
+  const publicLabel = getPublicVisibilityLabel(DEMO_FUNDER.name, visibility)
+
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-50" onClick={onClose} />
@@ -82,6 +89,15 @@ export function RequestUpdateModal({
             <div>
               <Label className="text-xs text-gray-500 uppercase tracking-wide">From</Label>
               <p className="text-sm font-medium text-gray-900 mt-1">{DEMO_FUNDER.name}</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Visible on platform as:{" "}
+                <span className="font-medium text-gray-700">{publicLabel}</span>
+              </p>
+              {visibility.mode === "bmfn-network" && (
+                <p className="text-xs text-gray-500 mt-0.5">
+                  BMFN network members see: {DEMO_FUNDER.name}
+                </p>
+              )}
             </div>
 
             <div className="space-y-3">

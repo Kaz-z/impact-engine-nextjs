@@ -5,6 +5,10 @@ import type {
 } from "./types"
 import { REQUIRED_INFORMATION_BY_ID } from "./required-information"
 import { DEMO_FUNDER } from "./funder-requirements"
+import {
+  loadFundSettings,
+  resolveFunderDisplayForRequest,
+} from "./fund-settings"
 
 export interface CharityDemoStorage {
   informationOverrides: Record<string, InformationItemStatus>
@@ -73,13 +77,20 @@ export function submitUpdateRequest(
   const date = now.split("T")[0]
   const requestId = `req-${Date.now()}`
 
+  const visibility = loadFundSettings().visibility
+  const funderDisplay = resolveFunderDisplayForRequest(
+    DEMO_FUNDER.name,
+    DEMO_FUNDER.id,
+    visibility,
+  )
+
   const request: UpdateRequest = {
     id: requestId,
     charityId,
     requestedBy: {
       id: DEMO_FUNDER.id,
-      displayName: DEMO_FUNDER.name,
-      isAnonymous: false,
+      displayName: funderDisplay.displayName,
+      isAnonymous: funderDisplay.isAnonymous,
     },
     requestedAt: now,
     message,
@@ -98,7 +109,7 @@ export function submitUpdateRequest(
     id: `uh-${requestId}`,
     date,
     title: "Update request sent",
-    description: `${DEMO_FUNDER.name} requested: ${itemLabels}.${message ? ` Message: "${message}"` : ""}`,
+    description: `${funderDisplay.displayName} requested: ${itemLabels}.${message ? ` Message: "${message}"` : ""}`,
     requestedBy: request.requestedBy,
     isShared: false,
   }
