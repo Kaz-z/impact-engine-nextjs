@@ -1,4 +1,4 @@
-import type { Charity, CharityYear, Rating } from "./types"
+import type { Charity, CharityYear, InformationItemStatus, Rating } from "./types"
 import { formatCurrency } from "./charity-metadata"
 
 export type FundCriterionId =
@@ -537,4 +537,29 @@ export function filterCharitiesByCriteria(
 
 export function getSharedPlatformEntries(charity: Charity) {
   return charity.updateHistory.filter((entry) => entry.isShared)
+}
+
+/** Information items to request based on failed fund criteria (not all profile gaps) */
+export function getCriteriaGapRequestItems(
+  checks: PreferenceCheckResult[],
+  informationStatus: InformationItemStatus[],
+): InformationItemStatus[] {
+  const failed = checks.filter((c) => !c.meetsRequirement)
+  const itemIds = new Set<string>()
+
+  for (const check of failed) {
+    const def = FUND_CRITERIA_BY_ID[check.criterionId]
+    if (def?.informationItemId) {
+      const item = informationStatus.find((i) => i.itemId === def.informationItemId)
+      if (item && (item.status === "missing" || item.status === "outdated")) {
+        itemIds.add(def.informationItemId)
+      }
+    }
+    // Reserves are derived from financials — request updated accounts to verify
+    if (check.criterionId === "reserves-min") {
+      itemIds.add("accounts-latest")
+    }
+  }
+
+  return informationStatus.filter((i) => itemIds.has(i.itemId))
 }

@@ -54,7 +54,7 @@ export default function FundPage() {
       <div className="max-w-7xl mx-auto p-6">
         <div className="mb-8">
           <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
-            Your fund page
+            Discover
           </p>
           <h1 className="text-3xl font-bold text-gray-900 mb-3">
             {DEMO_FUNDER.name}

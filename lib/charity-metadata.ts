@@ -197,6 +197,15 @@ const METADATA_OVERRIDES: Record<string, CharityMetadataOverride> = {
         informationItemId: "governance-policies",
         isShared: false,
       },
+      {
+        id: "uh-afh-3",
+        date: "2024-06-12",
+        title: "Reserves coverage provided",
+        description:
+          "Charity uploaded reserves coverage data. Now available to all funders on Impact Engine.",
+        requestedBy: { id: "anon-2", displayName: "A funder", isAnonymous: true },
+        isShared: true,
+      },
     ],
   },
   "shahid-afridi-foundation": {

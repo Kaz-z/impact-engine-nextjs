@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea"
 import type { InformationItemStatus } from "@/lib/types"
 import { REQUIRED_INFORMATION_BY_ID } from "@/lib/required-information"
 import { DEMO_FUNDER } from "@/lib/funder-requirements"
-import { getGapItemIds } from "@/lib/demo-storage"
 import {
   getPublicVisibilityLabel,
   loadFundSettings,
@@ -19,6 +18,8 @@ interface RequestUpdateModalProps {
   isOpen: boolean
   onClose: () => void
   informationStatus: InformationItemStatus[]
+  /** When set, only these items are shown (criteria-linked gaps) */
+  items?: InformationItemStatus[]
   onSubmit: (itemIds: string[], message?: string) => void
 }
 
@@ -26,18 +27,24 @@ export function RequestUpdateModal({
   isOpen,
   onClose,
   informationStatus,
+  items,
   onSubmit,
 }: RequestUpdateModalProps) {
-  const gapIds = getGapItemIds(informationStatus)
+  const gapItems =
+    items ??
+    informationStatus.filter(
+      (item) => item.status === "missing" || item.status === "outdated",
+    )
+  const gapIds = gapItems.map((i) => i.itemId)
   const [selected, setSelected] = useState<string[]>(gapIds)
   const [message, setMessage] = useState("")
 
   useEffect(() => {
     if (isOpen) {
-      setSelected(getGapItemIds(informationStatus))
+      setSelected(gapIds)
       setMessage("")
     }
-  }, [isOpen, informationStatus])
+  }, [isOpen, gapIds.join(",")])
 
   if (!isOpen) return null
 
@@ -54,10 +61,6 @@ export function RequestUpdateModal({
     setSelected(gapIds)
     onClose()
   }
-
-  const gapItems = informationStatus.filter(
-    (item) => item.status === "missing" || item.status === "outdated",
-  )
 
   const visibility = loadFundSettings().visibility
   const publicLabel = getPublicVisibilityLabel(DEMO_FUNDER.name, visibility)
@@ -101,29 +104,51 @@ export function RequestUpdateModal({
             </div>
 
             <div className="space-y-3">
-              <Label className="text-sm font-medium text-gray-900">Items to request</Label>
-              {gapItems.map((item) => {
-                const label = REQUIRED_INFORMATION_BY_ID[item.itemId]?.label ?? item.itemId
-                return (
-                  <label
-                    key={item.itemId}
-                    className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer"
-                  >
-                    <Checkbox
-                      checked={selected.includes(item.itemId)}
-                      onCheckedChange={() => toggleItem(item.itemId)}
-                      className="mt-0.5"
-                    />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{label}</p>
-                      <p className="text-xs text-gray-500 capitalize mt-0.5">{item.status}</p>
-                      {item.notes && (
-                        <p className="text-xs text-gray-400 mt-1">{item.notes}</p>
-                      )}
-                    </div>
-                  </label>
-                )
-              })}
+              <Label className="text-sm font-medium text-gray-900">
+                Items to request
+              </Label>
+              <p className="text-xs text-gray-500">
+                Based on gaps against your fund&apos;s criteria
+              </p>
+              {gapItems.length === 0 ? (
+                <p className="text-sm text-gray-500 py-4">
+                  No requestable items for the current criteria gaps.
+                </p>
+              ) : (
+                gapItems.map((item) => {
+                  const label =
+                    REQUIRED_INFORMATION_BY_ID[item.itemId]?.label ?? item.itemId
+                  const isMetricGap =
+                    item.itemId === "accounts-latest" && item.status === "present"
+                  return (
+                    <label
+                      key={item.itemId}
+                      className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer"
+                    >
+                      <Checkbox
+                        checked={selected.includes(item.itemId)}
+                        onCheckedChange={() => toggleItem(item.itemId)}
+                        className="mt-0.5"
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{label}</p>
+                        <p className="text-xs text-gray-500 capitalize mt-0.5">
+                          {isMetricGap ? "Request updated submission" : item.status}
+                        </p>
+                        {isMetricGap ? (
+                          <p className="text-xs text-gray-400 mt-1">
+                            To verify reserves meet your fund&apos;s minimum
+                          </p>
+                        ) : (
+                          item.notes && (
+                            <p className="text-xs text-gray-400 mt-1">{item.notes}</p>
+                          )
+                        )}
+                      </div>
+                    </label>
+                  )
+                })
+              )}
             </div>
 
             <div className="space-y-2">

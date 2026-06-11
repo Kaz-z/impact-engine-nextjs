@@ -89,7 +89,7 @@ export default function SearchPage() {
         {!filters.query && (
           <div className="mb-6 p-4 bg-white rounded-lg border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-gray-900">Start with your fund page</p>
+              <p className="text-sm font-medium text-gray-900">Start with Discover</p>
               <p className="text-sm text-gray-500 mt-0.5">
                 Set due diligence criteria and filter charities — or search for{" "}
                 <span className="font-medium text-gray-700">{DEMO_CHARITY_SEARCH_HINT}</span> directly
@@ -98,7 +98,7 @@ export default function SearchPage() {
             <div className="flex gap-2 shrink-0">
               <Button variant="outline" className="gap-2" asChild>
                 <Link href="/fund">
-                  Your fund page
+                  Discover
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>

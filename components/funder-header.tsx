@@ -16,16 +16,16 @@ export function FunderHeader() {
           </Link>
           <nav className="hidden sm:flex items-center gap-4 text-sm">
             <Link
-              href="/fund"
+              href="/fund/settings"
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Your fund page
+              Criteria
             </Link>
             <Link
-              href="/fund/settings"
+              href="/fund"
               className="text-gray-500 hover:text-gray-700 transition-colors"
             >
-              Criteria
+              Discover
             </Link>
             <Link
               href="/search"

@@ -47,7 +47,7 @@ export default function FundSettingsPage() {
       <div className="max-w-3xl mx-auto p-6">
         <Link href="/fund">
           <Button variant="ghost" className="gap-2 mb-6">
-            ← Back to your fund page
+            ← Back to Discover
           </Button>
         </Link>
 
@@ -73,7 +73,7 @@ export default function FundSettingsPage() {
               Due diligence criteria
             </h2>
             <p className="text-sm text-gray-500 mb-6">
-              What charities must meet to appear on your fund page.
+              What charities must meet to appear in Discover.
             </p>
             <FundCriteriaConfigurator
               config={settings.criteria}

@@ -18,12 +18,10 @@ import { CharityCommissionBlock } from "@/components/charity-commission-block"
 import { TrusteeList } from "@/components/trustee-list"
 import { CharityDetailsBlock } from "@/components/charity-details-block"
 import { MissingInformationPanel } from "@/components/missing-information-panel"
-import { FundPreferencesReview } from "@/components/fund-preferences-review"
 import { FunderDueDiligencePanel } from "@/components/funder-due-diligence-panel"
 import { SharedPlatformData } from "@/components/shared-platform-data"
-import { CriteriaGapsPanel } from "@/components/criteria-gaps-panel"
+import { FundCriteriaTable } from "@/components/fund-criteria-table"
 import { ProfileSummaryBadges } from "@/components/profile-summary-badges"
-import { RequestUpdateButton } from "@/components/request-update-button"
 import { UpdatesTab } from "@/components/updates-tab"
 import { useCharityDemoState } from "@/hooks/use-charity-demo-state"
 import { FunderHeader } from "@/components/funder-header"
@@ -44,6 +42,22 @@ interface CharityProfileViewProps {
   yearData: CharityYear
   selectedYear: number
   slug: string
+}
+
+function getReservesCoverageTooltip(charity: Charity): string {
+  const base =
+    "How many months the charity can operate with existing reserves. 3-6 months is healthy."
+  const reservesEntry = charity.updateHistory.find((entry) =>
+    entry.title.toLowerCase().includes("reserves coverage"),
+  )
+  if (!reservesEntry) return base
+
+  const providedDate = new Date(reservesEntry.date).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
+  return `${base} Provided on ${providedDate} — this figure may be outdated.`
 }
 
 export function CharityProfileView({
@@ -75,7 +89,7 @@ export function CharityProfileView({
   )
 
   const demoMode = getEnabledCriterionIds(settings.criteria).length > 0
-  const unmetCount = preferenceChecks.filter((c) => !c.meetsRequirement).length
+  const metCount = preferenceChecks.filter((c) => c.meetsRequirement).length
 
   return (
     <TooltipProvider>
@@ -84,7 +98,7 @@ export function CharityProfileView({
         <div className="max-w-7xl mx-auto p-6">
           <Link href="/fund">
             <Button variant="ghost" className="gap-2 mb-6">
-              ← Back to your fund page
+              ← Back to Discover
             </Button>
           </Link>
 
@@ -95,108 +109,109 @@ export function CharityProfileView({
             </div>
           )}
 
-          <div className="bg-white rounded-lg border border-gray-200 p-8 mb-6">
-            <div className="flex items-start justify-between gap-6 mb-2">
+          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+            <div className="flex items-start justify-between gap-6">
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{charity.name}</h1>
+                <h1 className="text-2xl font-bold text-gray-900 mb-1">{charity.name}</h1>
                 <p className="text-sm text-gray-500">
-                  Charity number:{" "}
+                  Charity number{" "}
                   <span className="font-mono font-medium text-gray-700">
                     {charity.registrationNumber}
                   </span>
+                  {charity.categories[0] && (
+                    <span className="text-gray-400 mx-2">·</span>
+                  )}
+                  {charity.categories[0]}
                 </p>
+                {demoMode && preferenceChecks.length > 0 && (
+                  <p className="text-sm text-gray-600 mt-3">
+                    <span className="font-medium text-gray-900">
+                      {metCount} of {preferenceChecks.length}
+                    </span>{" "}
+                    of your fund&apos;s requirements met
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col items-end gap-3 shrink-0">
-                <div>
-                  <p className="text-xs text-gray-600 uppercase tracking-wide mb-1">Financial year</p>
-                  <Select
-                    value={selectedYear.toString()}
-                    onValueChange={(year) => {
-                      window.location.href = `/charity/${slug}?year=${year}`
-                    }}
-                  >
-                    <SelectTrigger className="w-32 h-10">
-                      <SelectValue placeholder="Year" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {charity.years
-                        .map((y) => y.year)
-                        .sort((a, b) => b - a)
-                        .map((year) => (
-                          <SelectItem key={year} value={year.toString()}>
-                            {year}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <RequestUpdateButton
-                  informationStatus={charity.informationStatus}
-                  onSubmit={sendUpdateRequest}
-                />
+              <div className="shrink-0">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Financial year</p>
+                <Select
+                  value={selectedYear.toString()}
+                  onValueChange={(year) => {
+                    window.location.href = `/charity/${slug}?year=${year}`
+                  }}
+                >
+                  <SelectTrigger className="w-28 h-9">
+                    <SelectValue placeholder="Year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {charity.years
+                      .map((y) => y.year)
+                      .sort((a, b) => b - a)
+                      .map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            <ProfileSummaryBadges
-              informationSummary={informationSummary}
-              dueDiligenceSummary={dueDiligenceSummary}
-            />
+            {!demoMode && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <ProfileSummaryBadges
+                  informationSummary={informationSummary}
+                  dueDiligenceSummary={dueDiligenceSummary}
+                />
+              </div>
+            )}
           </div>
 
-          <SharedPlatformData charity={charity} />
-
-          {demoMode && (
-            <div className="mt-6">
-              <CriteriaGapsPanel
+          {demoMode ? (
+            <div className="space-y-6">
+              <FundCriteriaTable
                 checks={preferenceChecks}
                 charity={charity}
                 onSubmitRequest={sendUpdateRequest}
               />
+              <SharedPlatformData charity={charity} />
             </div>
+          ) : (
+            <SharedPlatformData charity={charity} />
           )}
 
-          <Tabs
-            defaultValue={demoMode ? "due-diligence" : "overview"}
-            className="space-y-6 mt-6"
-          >
+          <Tabs defaultValue="overview" className="space-y-6 mt-6">
             <TabsList
               className={`grid w-full bg-white border border-gray-200 ${
-                demoMode ? "grid-cols-4" : "grid-cols-5"
+                demoMode ? "grid-cols-3" : "grid-cols-5"
               }`}
             >
-              <TabsTrigger value="due-diligence">
-                Due diligence
-                {unmetCount > 0 && (
-                  <span className="ml-1.5 text-xs text-amber-600">({unmetCount})</span>
-                )}
-              </TabsTrigger>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              {!demoMode && <TabsTrigger value="missing-info">Missing info</TabsTrigger>}
+              {!demoMode && (
+                <>
+                  <TabsTrigger value="due-diligence">Due diligence</TabsTrigger>
+                  <TabsTrigger value="missing-info">Missing info</TabsTrigger>
+                </>
+              )}
               <TabsTrigger value="updates">Updates</TabsTrigger>
               <TabsTrigger value="analysis">Analysis</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="due-diligence" className="space-y-6">
-              {demoMode ? (
-                <FundPreferencesReview checks={preferenceChecks} />
-              ) : (
+            {!demoMode && (
+              <TabsContent value="due-diligence" className="space-y-6">
                 <FunderDueDiligencePanel summary={dueDiligenceSummary} />
-              )}
-            </TabsContent>
+              </TabsContent>
+            )}
 
             <TabsContent value="overview" className="space-y-6">
               <CharityCommissionBlock
                 data={charity.charityCommission}
                 charityNumber={charity.registrationNumber}
               />
-              {demoMode ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <TrusteeList trustees={charity.trustees} />
                 <CharityDetailsBlock charity={charity} />
-              ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <TrusteeList trustees={charity.trustees} />
-                  <CharityDetailsBlock charity={charity} />
-                </div>
-              )}
+              </div>
             </TabsContent>
 
             {!demoMode && (
@@ -253,7 +268,7 @@ export function CharityProfileView({
                       />
                       <FinanceMetric
                         label="Reserves Coverage"
-                        tooltip="How many months the charity can operate with existing reserves. 3-6 months is healthy."
+                        tooltip={getReservesCoverageTooltip(charity)}
                         value={`${yearData.finance.reservesCoverage.toFixed(1)} months`}
                         rating={yearData.finance.reservesCoverageRating}
                         metricName="Reserves Coverage"
@@ -338,7 +353,7 @@ function FinanceMetric({
           <TooltipTrigger asChild>
             <HelpCircle className="h-3.5 w-3.5 text-gray-400 cursor-help" />
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent className="max-w-sm">
             <p>{tooltip}</p>
           </TooltipContent>
         </Tooltip>
